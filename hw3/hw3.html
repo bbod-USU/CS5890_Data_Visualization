@@ -50,21 +50,21 @@
 
     <h3>CS 5890 Homework 3</h3>
     <address>
-      <span>Your Name</span>
-      <span>Your Email Address</span>
-      <span>Your A#</span>
+      <span>Brady Bodily</span>
+      <span>brady.bodily1@aggiemail.usu.edu</span>
+      <span>A00987897</span>
     </address>
     <br>
     <hr>
     <br>
 
     <span>
-      <button>Staircase</button>
+      <button onclick="staircase()">Staircase</button>
     </span>
 
     <span>
       <label>Dataset:</label>
-      <select id="dataset">
+      <select id="dataset" onchange=changeData()>
         <option value="anscombe_I">Anscombe's Quartet I</option>
         <option selected value="anscombe_II">Anscombe's Quartet II</option>
         <option value="anscombe_III">Anscombe's Quartet III</option>
@@ -73,7 +73,7 @@
     </span>
 
     <span>
-      <input type="checkbox" id="random"> Random Subset
+      <input type="checkbox" id="random" onselect="randomSubset()"> Random Subset
     </span>
 
     <br>
@@ -96,7 +96,7 @@
         </g>
       </svg>
 
-      <svg width="200" height="200">
+      <svg width="200" height="200" id="chart2">
         <g transform="translate(0, 200) scale(1, -1)" class="barChart" >
           <rect x="10" y="0" width="10" height="91"></rect>
           <rect x="20" y="0" width="10" height="81"></rect>
