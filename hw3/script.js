@@ -18,40 +18,104 @@ function staircase() {
  * @param data
  */
 function update(data) {
-  // Set up the scales
-  let aScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.a)])
-    .range([0, 150]);
-  let bScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.b)])
-    .range([0, 150]);
-  let iScale = d3.scaleLinear()
-    .domain([0, data.length])
-    .range([0, 110]);
+    // Set up the scales
+    let aScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.a)])
+        .range([0, 150]);
+    let bScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.b)])
+        .range([0, 150]);
+    let iScale = d3.scaleLinear()
+        .domain([0, data.length])
+        .range([0, 110]);
 
 
-  // ****** TODO: PART III (you will also edit in PART V) ******
+    // ****** TODO: PART III (you will also edit in PART V) ******
 
-  // TODO: Select and update the 'a' bar chart bars
-    let aBars = document.getElementById("chart1").children[0].children;
-    for(let i = 0; i < aBars.length; i++){
-        console.log(aScale(data[i].a));
-        d3.select("chart1").select("barChart").selectAll('rect').attr('height', aScale(data[i].a));
-        aBars[i].height = aScale(data[i].a);
-    }
+    // TODO: Select and update the 'a' bar chart bars
+    //let chart1 =  d3.select('#chart1').selectAll('rect');
+    d3.select('#chart1')
+        .selectAll('rect')
+        .data(data)
+        .on('mouseover', function(d,i) {
+            d3.select(this).style('fill', 'orange')
+        })
+        .on('mouseout', function(d,i) {
+            d3.select(this).style('fill', 'steelblue')
+        })
+        .attr('height', d => aScale(d.a))
 
-  // TODO: Select and update the 'b' bar chart bars
-    let bBars = document.getElementById("chart2").children[0].children;
-    for(let i = 0; i < bBars.length; i++){
-        bBars[i].height = bScale(data[i].b);
-    }
-  // TODO: Select and update the 'a' line chart path using this line generator
+        .enter()
+        .append("rect")
+        .attr("x", function(d,i){
+            return iScale(i+1);
+        })
+        .attr("y", 0)
+        .attr("width", 20)
+        .attr("height", 0)
+        .style("fill", "orange")
+        .attr("opacity", 0)
 
-  let aLineGenerator = d3.line()
-    .x((d, i) => iScale(i))
-    .y((d) => aScale(d.a));
 
-  // TODO: Select and update the 'b' line chart path (create your own generator)
+        .exit()
+        .remove()
+       ;
+
+
+
+    // TODO: Select and update the 'b' bar chart bars
+    let tmp = d3.select('#chart2')
+        .selectAll('rect')
+        .data(data);
+
+        tmp.on('mouseover', function(d,i) {
+            d3.select(this).style('fill', 'orange')
+
+        })
+        .on('mouseout', function(d,i) {
+            d3.select(this).style('fill', 'steelblue')
+
+        })
+        .attr('height', d => aScale(d.b));
+
+        tmp.enter()
+        .append("rect")
+        .attr("x", function(d,i){
+            return iScale(i+1);
+        })
+        .attr("y", 0)
+        .attr("width", 20)
+        .attr("height", 0)
+        .attr("translate(0, 200) scale(1, -1)")
+
+        .style("fill", "steelblue");
+
+
+        tmp.exit()
+        .remove();
+
+
+    // TODO: Select and update the 'a' line chart path using this line generator
+
+    let aLineGenerator = d3.line()
+        .x((d, i) => iScale(i))
+        .y((d) => aScale(d.a));
+
+    d3.select('#line1')
+        .select('path')
+        .attr("d", aLineGenerator(data));
+
+    // TODO: Select and update the 'b' line chart path (create your own generator)
+
+    let bLineGenerator = d3.line()
+        .x((d, i) => iScale(i))
+        .y((d) => bScale(d.b));
+
+    d3.select('#line2')
+        .select('path')
+        .attr("d", bLineGenerator(data));
+
+
 
   // TODO: Select and update the 'a' area chart path using this area generator
   let aAreaGenerator = d3.area()
@@ -59,11 +123,36 @@ function update(data) {
     .y0(0)
     .y1(d => aScale(d.a));
 
-  // TODO: Select and update the 'b' area chart path (create your own generator)
+    d3.select('#area1')
+        .select('path')
+        .attr("d", aAreaGenerator(data));
 
-  // TODO: Select and update the scatterplot points
+    // TODO: Select and update the 'b' area chart path (create your own generator)
+
+    let bAreaGenerator = d3.area()
+        .x((d, i) => iScale(i))
+        .y0(0)
+        .y1(d => aScale(d.b));
+
+    d3.select('#area2')
+        .select('path')
+        .attr("d", bAreaGenerator(data));
+
+    // TODO: Select and update the scatterplot points
+
+    d3.select('#scatterplot')
+        .selectAll('circle')
+        .data(data)
+        .on('click', d => console.log([d.a, d.b]))
+        .attr('cx', d => aScale(d.a))
+        .attr('cy', d => bScale(d.b));
+
 
   // ****** TODO: PART IV ******
+
+
+
+
 
 }
 
