@@ -4,7 +4,7 @@
  * Note: use only the DOM API, not D3!
  */
 function staircase() {
-  // ****** TODO: PART II ******
+  // ******  PART II ******
     let bar = document.getElementById("chart1").children[0].children;
     for(let i = 0; i < bar.length; i++){
         bar[i].style.height = (i+1) * 10;
@@ -32,8 +32,7 @@ function update(data) {
 
     // ****** TODO: PART III (you will also edit in PART V) ******
 
-    // TODO: Select and update the 'a' bar chart bars
-    //let chart1 =  d3.select('#chart1').selectAll('rect');
+    //  Select and update the 'a' bar chart bars
     let barChart1 = d3.select('#barChart1')
         .selectAll('rect')
         .data(data);
@@ -64,7 +63,7 @@ function update(data) {
 
 
 
-    // TODO: Select and update the 'b' bar chart bars
+    //  Select and update the 'b' bar chart bars
     let barChart2 = d3.select('#barChart2')
         .selectAll('rect')
         .data(data);
@@ -95,7 +94,7 @@ function update(data) {
 
 
 
-    // TODO: Select and update the 'a' line chart path using this line generator
+    //  Select and update the 'a' line chart path using this line generator
 
     let aLineGenerator = d3.line()
         .x((d, i) => iScale(i))
@@ -106,7 +105,7 @@ function update(data) {
 
     line1.attr("d", aLineGenerator(data));
 
-    // TODO: Select and update the 'b' line chart path (create your own generator)
+    //  Select and update the 'b' line chart path (create your own generator)
 
     let bLineGenerator = d3.line()
         .x((d, i) => iScale(i))
@@ -118,7 +117,7 @@ function update(data) {
 
 
 
-  // TODO: Select and update the 'a' area chart path using this area generator
+  // Select and update the 'a' area chart path using this area generator
   let aAreaGenerator = d3.area()
     .x((d, i) => iScale(i))
     .y0(0)
@@ -128,7 +127,7 @@ function update(data) {
         .select('path')
         .attr("d", aAreaGenerator(data));
 
-    // TODO: Select and update the 'b' area chart path (create your own generator)
+    // Select and update the 'b' area chart path (create your own generator)
 
     let bAreaGenerator = d3.area()
         .x((d, i) => iScale(i))
@@ -139,7 +138,7 @@ function update(data) {
         .select('path')
         .attr("d", bAreaGenerator(data));
 
-    // TODO: Select and update the scatterplot points
+    // Select and update the scatterplot points
 
     let scatterPlot = d3.select('#scatterplot')
         .selectAll('circle')
@@ -157,7 +156,7 @@ function update(data) {
         .attr('cy', d=> bScale(d.b))
         .attr('r', 5);
 
-  // ****** TODO: PART IV ******
+  // ******  PART IV ******
 
 
 
