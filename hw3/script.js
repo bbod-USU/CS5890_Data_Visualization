@@ -79,14 +79,14 @@ function update(data) {
             d3.select(this).style('fill', 'steelblue')
 
         })
-        .attr('height', d => aScale(d.b));
+        .attr('height', d => bScale(d.b));
 
     barChart2.enter()
         .append("rect")
         .attr("x", function (d, i) {
             return iScale(i + 1);
         })
-        .attr("height", d => aScale(d.b))
+        .attr("height", d => bScale(d.b))
         .attr("y", 0)
         .attr("width", 10)
 
