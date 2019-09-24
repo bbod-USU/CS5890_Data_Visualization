@@ -34,65 +34,65 @@ function update(data) {
 
     // TODO: Select and update the 'a' bar chart bars
     //let chart1 =  d3.select('#chart1').selectAll('rect');
-    d3.select('#chart1')
+    let barChart1 = d3.select('#barChart1')
         .selectAll('rect')
-        .data(data)
-        .on('mouseover', function(d,i) {
+        .data(data);
+    barChart1.exit().remove();
+
+
+        barChart1.on('mouseover', function (d, i) {
             d3.select(this).style('fill', 'orange')
         })
-        .on('mouseout', function(d,i) {
+        .on('mouseout', function (d, i) {
             d3.select(this).style('fill', 'steelblue')
         })
-        .attr('height', d => aScale(d.a))
+        .attr('height', d => aScale(d.a));
 
-        .enter()
+    barChart1.enter()
         .append("rect")
-        .attr("x", function(d,i){
-            return iScale(i+1);
+        .attr("x", function (d, i) {
+            return iScale(i + 1);
         })
+        .attr("height", d => aScale(d.a))
         .attr("y", 0)
-        .attr("width", 20)
-        .attr("height", 0)
-        .style("fill", "orange")
-        .attr("opacity", 0)
+        .attr("width", 10)
+
+        .style("fill", "steelblue");
 
 
-        .exit()
-        .remove()
-       ;
+
 
 
 
     // TODO: Select and update the 'b' bar chart bars
-    let tmp = d3.select('#chart2')
+    let barChart2 = d3.select('#barChart2')
         .selectAll('rect')
         .data(data);
 
-        tmp.on('mouseover', function(d,i) {
-            d3.select(this).style('fill', 'orange')
+    barChart2.exit().remove();
 
+
+    barChart2.on('mouseover', function (d, i) {
+        d3.select(this).style('fill', 'orange')
         })
-        .on('mouseout', function(d,i) {
+        .on('mouseout', function (d, i) {
             d3.select(this).style('fill', 'steelblue')
 
         })
         .attr('height', d => aScale(d.b));
 
-        tmp.enter()
+    barChart2.enter()
         .append("rect")
-        .attr("x", function(d,i){
-            return iScale(i+1);
+        .attr("x", function (d, i) {
+            return iScale(i + 1);
         })
+        .attr("height", d => aScale(d.b))
         .attr("y", 0)
-        .attr("width", 20)
-        .attr("height", 0)
-        .attr("translate(0, 200) scale(1, -1)")
+        .attr("width", 10)
 
         .style("fill", "steelblue");
 
 
-        tmp.exit()
-        .remove();
 
 
     // TODO: Select and update the 'a' line chart path using this line generator
@@ -101,9 +101,10 @@ function update(data) {
         .x((d, i) => iScale(i))
         .y((d) => aScale(d.a));
 
-    d3.select('#line1')
-        .select('path')
-        .attr("d", aLineGenerator(data));
+    let line1 = d3.select('#line1')
+        .select('path');
+
+    line1.attr("d", aLineGenerator(data));
 
     // TODO: Select and update the 'b' line chart path (create your own generator)
 
@@ -140,13 +141,21 @@ function update(data) {
 
     // TODO: Select and update the scatterplot points
 
-    d3.select('#scatterplot')
+    let scatterPlot = d3.select('#scatterplot')
         .selectAll('circle')
-        .data(data)
-        .on('click', d => console.log([d.a, d.b]))
+        .data(data);
+
+    scatterPlot.exit().remove();
+
+    scatterPlot.on('click', d => console.log([d.a, d.b]))
         .attr('cx', d => aScale(d.a))
         .attr('cy', d => bScale(d.b));
 
+    scatterPlot.enter()
+        .append('circle')
+        .attr('cx', d => aScale(d.a))
+        .attr('cy', d=> bScale(d.b))
+        .attr('r', 5);
 
   // ****** TODO: PART IV ******
 
