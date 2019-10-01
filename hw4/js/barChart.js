@@ -31,15 +31,16 @@ class BarChart {
       let yaxisWidth = 60;
       d3.select("#barChart")
           .attr("transform", "scale(1,-1)");
-      console.log(data);
       data.sort(function(a, b) {
           return a[1] > b[1] ? 1 : -1;
       });
-      console.log(data);
+
+
       let dataNum = [];
       data.forEach(x => dataNum.push(x.data));
       let datadate = [];
       data.forEach(x => datadate.push(x.date));
+      var blues = d3.scaleOrdinal(d3.schemeBlues[datadate.length]);
 
       let yScale = d3.scaleLinear()
           .domain([0 , d3.max(dataNum)])
@@ -85,6 +86,11 @@ class BarChart {
           .attr('width', xScale.bandwidth())
           .attr('height', (d,i) => svgHeight - yScale(dataNum[i])-xaxisHeight)
           .attr('class', 'bar');
+      console.log(blues);
+
+      d3.select("#bars")
+          .selectAll('rect')
+          .attr('fill', (d, i) => blues[i]);
     //
 
 //      barChart.exit().remove();
