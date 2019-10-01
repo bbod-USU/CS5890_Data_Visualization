@@ -24,7 +24,7 @@ function update(data) {
         .range([0, 150]);
     let bScale = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.b)])
-        .range([0, 150]);
+        .range([0, 150]
     let iScale = d3.scaleLinear()
         .domain([0, data.length])
         .range([0, 110]);

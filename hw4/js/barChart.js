@@ -21,7 +21,16 @@ class BarChart {
 
     // Create the x and y scales; make
     // sure to leave room for the axes
-    
+
+      let data = this.chooseData(selectedDimension);
+
+      let xaxisHeight = 20;
+      let yaxisWidth = 20;
+
+      let dataNum = [];
+      data.forEach(x => dataNum.push(x.data));
+      let datadate = [];
+      data.forEach(x => datadate.push(x.date));
 
     // Create colorScale
 
@@ -51,5 +60,19 @@ class BarChart {
     // ******* TODO: PART I *******
     //Changed the selected data when a user selects a different
     // menu item from the drop down.
+      let currentDataType = d3.select('#dataset')
+          .node().value;
+          //.property("value");
+      let selectedData = [];
+      this.allData.forEach(x => {
+          var item = [];
+          item.date = x["year"];
+          item.data = x[currentDataType];
+          selectedData.push(item);
+      });
+
+      console.log(this.allData);
+      console.log(selectedData);
+      return selectedData;
   }
 }

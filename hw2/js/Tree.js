@@ -96,7 +96,7 @@ class Tree {
                 .attr("r", 35)
 
                 .attr("cx", (node.level+3) * 100)
-                .attr("cy", (node.position+3) * 100)
+                .attr("cy", (node.position+3) * 100);
             svgElement.append("text")
                 .attr("class", "label")
                 .attr("dx", (node.level+3) * 100)

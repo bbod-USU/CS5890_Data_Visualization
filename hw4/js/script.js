@@ -46,5 +46,11 @@ function chooseData() {
   // ******* TODO: PART I *******
   // Changed the selected data when a user selects a different
   // menu item from the drop down.
+    let currentDataType = d3.select('#dataset')
+        .node().value;
+    //.property("value");
+    let selectedData = [];
+    this.allData.forEach(x => selectedData.push(x[currentDataType]));
+    return selectedData;
 
 }
