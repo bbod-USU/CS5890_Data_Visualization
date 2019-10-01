@@ -83,7 +83,7 @@ class BarChart {
           .attr('x', (d,i) => xScale(d))
           .attr('y', (d,i) => yScale(dataNum[i]))
           .attr('width', xScale.bandwidth())
-          .attr('height', (d,i) => svgHeight - yScale(dataNum[i]))
+          .attr('height', (d,i) => svgHeight - yScale(dataNum[i])-xaxisHeight)
           .attr('class', 'bar');
     //
 
