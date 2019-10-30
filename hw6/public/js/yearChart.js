@@ -69,7 +69,7 @@ class YearChart {
       .domain(domain)
       .range(range);
 
-    // ******* TODO: PART I *******
+    // ******* DONE: PART I *******
 
     // Create the chart by adding circle elements representing each election year
 
@@ -91,6 +91,74 @@ class YearChart {
     //Election information corresponding to that year should be loaded and passed to
     // the update methods of other visualizations
 
+      let yChart = this;
+
+      var data = [[0, (this.svgHeight - 40)/2], [this.svgWidth, (this.svgHeight - 40)/2]];
+
+      let scaleX = d3.scaleLinear()
+          .range([this.margin.left, this.svgWidth - this.margin.right])
+          .domain([0, this.electionWinners.length]);
+
+
+
+      let line = d3.line();
+      let pathString = line(data);
+
+      this.svg.append('g').append('path')
+          .attr('d', pathString)
+          .style("stroke-dasharray", ("2, 2"))
+          .attr('stroke', 'black');
+
+      let years = this.svg.append('g').selectAll('g')
+          .data(this.electionWinners)
+          .enter()
+          .append('g');
+
+      years.append('circle')
+          .attr('cy', (this.svgHeight - 38) * .5)
+
+          .attr('cx', (d, i) =>  {return scaleX(i)} )
+          .attr('r', 10)
+
+          .attr('class', (d) => {
+              return yChart.chooseClass(d.PARTY)
+          });
+
+      //Append text information of each year right below the corresponding circle
+      //HINT: Use .yeartext class to style your text elements
+      years.append('text')
+          .attr('x', (d, i) =>  {return scaleX(i)} )
+          .attr('y', (this.svgHeight - 20) * .5 + 30)
+          .attr('yearText', true)
+          .attr('text-anchor', 'middle')
+          .text((d) => {return d.YEAR});
+
+      //Style the chart by adding a dashed line that connects all these years.
+      //HINT: Use .lineChart to style this dashed line
+      //Done. Before adding circles
+
+      //Clicking on any specific year should highlight that circle and  update the rest of the visualizations
+      //HINT: Use .highlighted class to style the highlighted circle
+      years.selectAll('circle')
+          .on('mouseover', function (d) {
+              d3.select(this).classed('highlighted', true);
+          })
+          .on('mouseout', function (d) {
+              years.selectAll('circle').classed('highlighted', false);
+          })
+          .on('click', function (d) {
+              years.selectAll('circle').classed('selected', false);
+              d3.select(this).classed('selected', true);
+
+              let file = 'data/Year_Timeline_' + d.YEAR + '.csv';
+
+              d3.csv(file, function (error, electionResult) {
+                  yChart.electoralVoteChart.update(electionResult, self.colorScale);
+                  yChart.votePercentageChart.update(electionResult);
+                  yChart.tileChart.update(electionResult, self.colorScale);
+              });
+
+          })
 
     //******* TODO: EXTRA CREDIT *******
 
@@ -98,6 +166,7 @@ class YearChart {
     //Implement a call back method to handle the brush end event.
     //Call the update method of shiftChart and pass the data corresponding to brush selection.
     //HINT: Use the .brush class to style the brush.
+
 
   }
 

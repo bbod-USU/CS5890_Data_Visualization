@@ -77,7 +77,96 @@ class TileChart {
     //Call the tool tip on hover over the tiles to display stateName, count of electoral votes
     //then, vote percentage and number of votes won by each party.
     //HINT: Use the .republican, .democrat and .independent classes to style your elements.
-    
+
+      var self = this;
+
+      let statesG = this.svg.selectAll('g')
+          .data(electionResult);
+
+      statesG.exit().remove();
+      statesG = statesG.enter().append('g').merge(statesG);
+
+      let statesRect = statesG.selectAll('rect')
+          .data(function(d){
+              return d3.select(this).data()
+          });
+
+      //statesRect.exit().remove();
+      statesRect = statesRect.enter().append('rect').merge(statesRect);
+
+      statesRect
+          .attr('width', this.svgWidth/this.maxColumns)
+          .attr('height', this.svgHeight/this.maxRows)
+          .attr('x', function(d){
+              return (self.svgWidth/self.maxColumns)*(parseInt(d["Space"]))
+          })
+          .attr('y', function(d){
+              return (self.svgHeight/self.maxRows)*(parseInt(d["Row"]))
+          })
+          .attr('fill', function(d){
+              return colorScale(d["RD_Difference"])
+          })
+          .attr('space-row', function(d){
+              return d["Space"] + '-' + d["Row"];
+          })
+          .attr('stroke', '#ffffff')
+          .attr('stroke-width', 1)
+          .call(tip)
+          .on('mouseover', tip.show)
+          .on('mouseout', tip.hide)
+
+      let statesNameText = statesG.selectAll('text').filter('.stateName')
+          .data(function(d){
+              return d3.select(this).data()
+          });
+
+      //statesNameText.exit().remove();
+      statesNameText = statesNameText.enter().append('text').merge(statesNameText);
+
+      statesNameText
+          .attr('x', function(d){
+              let startX = (self.svgWidth/self.maxColumns)*(parseInt(d["Space"]))
+              return startX + (self.svgWidth/self.maxColumns)/2
+          })
+          .attr('y', function(d){
+              let startY = (self.svgHeight/self.maxRows)*(parseInt(d["Row"]))
+              return startY + (self.svgHeight/self.maxRows)/2
+
+          })
+          .attr('class', 'tilestext stateName')
+          .text(function(d){
+              return d["Abbreviation"]
+          })
+          .call(tip)
+          .on('mouseover', tip.show)
+          .on('mouseout', tip.hide)
+
+      let statesEVText = statesG.selectAll('text').filter('.stateEV')
+          .data(function(d){
+              return d3.select(this).data()
+          });
+
+      statesEVText.exit().remove();
+      statesEVText = statesEVText.enter().append('text').merge(statesEVText);
+
+      statesEVText
+          .attr('x', function(d){
+              let startX = (self.svgWidth/self.maxColumns)*(parseInt(d["Space"]))
+              return startX + (self.svgWidth/self.maxColumns)/2
+          })
+          .attr('y', function(d){
+              let startY = (self.svgHeight/self.maxRows)*(parseInt(d["Row"]))
+              return startY + (self.svgHeight/self.maxRows)/2 + 15;
+          })
+          .attr('class', 'tilestext stateEV')
+          .text(function(d){
+              return d["Total_EV"]
+          })
+          .call(tip)
+          .on('mouseover', tip.show)
+          .on('mouseout', tip.hide)
+
+
   };
 
 
