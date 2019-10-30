@@ -69,7 +69,7 @@ class YearChart {
       .domain(domain)
       .range(range);
 
-    // ******* DONE: PART I *******
+    // ******* TODO: PART I *******
 
     // Create the chart by adding circle elements representing each election year
 
@@ -91,6 +91,7 @@ class YearChart {
     //Election information corresponding to that year should be loaded and passed to
     // the update methods of other visualizations
 
+      let domainOfYears = [];
       let yChart = this;
 
       var data = [[0, (this.svgHeight - 40)/2], [this.svgWidth, (this.svgHeight - 40)/2]];
@@ -133,32 +134,20 @@ class YearChart {
           .attr('text-anchor', 'middle')
           .text((d) => {return d.YEAR});
 
-      //Style the chart by adding a dashed line that connects all these years.
-      //HINT: Use .lineChart to style this dashed line
-      //Done. Before adding circles
-
-      //Clicking on any specific year should highlight that circle and  update the rest of the visualizations
-      //HINT: Use .highlighted class to style the highlighted circle
-      years.selectAll('circle')
-          .on('mouseover', function (d) {
-              d3.select(this).classed('highlighted', true);
-          })
-          .on('mouseout', function (d) {
-              years.selectAll('circle').classed('highlighted', false);
-          })
-          .on('click', function (d) {
+      years
+          .on("click", d => {
               years.selectAll('circle').classed('selected', false);
-              d3.select(this).classed('selected', true);
+              d3.select(d3.event.target).classed("selected", true);
 
-              let file = 'data/Year_Timeline_' + d.YEAR + '.csv';
-
-              d3.csv(file, function (error, electionResult) {
-                  yChart.electoralVoteChart.update(electionResult, self.colorScale);
-                  yChart.votePercentageChart.update(electionResult);
-                  yChart.tileChart.update(electionResult, self.colorScale);
+              // Election information corresponding to the year selected is loaded and passed to the update methods of the other visualizations.
+              d3.csv(`data/Year_Timeline_${d.YEAR}.csv`).then(electionResult => {
+                  this.electoralVoteChart.update(electionResult, this.colorScale);
+                  this.votePercentageChart.update(electionResult, this.colorScale);
+                  this.tileChart.update(electionResult, this.colorScale)
               });
-
           })
+          .on("mouseenter", () => d3.select(d3.event.target).classed("highlighted", true))
+          .on("mouseleave", () => d3.select(d3.event.target).classed("highlighted", false));
 
     //******* TODO: EXTRA CREDIT *******
 
