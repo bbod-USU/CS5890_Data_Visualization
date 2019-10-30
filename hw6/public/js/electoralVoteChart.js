@@ -76,7 +76,6 @@ class ElectoralVoteChart {
 
         this.svg.selectAll("*").remove();
 
-        //Group the states based on the winning party for the state
         let allVotes = 0;
         let independentParty = [];
         let democratParty = [];
@@ -86,12 +85,12 @@ class ElectoralVoteChart {
             if(d.RD_Difference < 0) democratParty.push(d);
             else if (d.RD_Difference > 0) republicanParty.push(d);
             else independentParty.push(d);
-        })
+        });
 
-        //Sorts group of states based on the margin of victory
-        independentParty.sort((a, b) => b.Total_EV - a.Total_EV);
         democratParty.sort((a, b) => a.RD_Difference - b.RD_Difference);
         republicanParty.sort((a, b) => a.RD_Difference - b.RD_Difference);
+        independentParty.sort((a, b) => b.Total_EV - a.Total_EV);
+
 
         let sortedData = [];
         sortedData = sortedData.concat(independentParty);
@@ -108,7 +107,6 @@ class ElectoralVoteChart {
             .domain([0, allVotes])
             .range([0, this.svgWidth]);
 
-        //Create the stacked bar chart.
         let electoralVoteChart = this.svg
             .selectAll("rect")
             .data(sortedData)
@@ -120,24 +118,21 @@ class ElectoralVoteChart {
             .attr("height", 20)
             .attr("x", (_, i) => electoralVoteScale(xCoordinates[i]))
             .attr("y", 50)
-            //Uses the global color scale to color code the rectangles.
             .attr("fill", d => d.RD_Difference === "0" ? "green" : colorScale(d.RD_Difference))
-            .attr("class", "electoralVotes")
+            .attr("class", "electoralVotes");
 
-        //Displays the total count of electoral votes won by the Democrat and Republican party
-        //on top of the corresponding groups of bars.
         electoralVoteChart
             .append("text")
             .text(d => d.I_EV_Total)
             .attr("y", 50)
-            .attr("class", "electoralVoteText independent")
+            .attr("class", "electoralVoteText independent");
 
         electoralVoteChart
             .append("text")
             .text(d => d.D_EV_Total)
             .attr("y", 50)
             .attr("dx", d => d.I_EV_Total === "" ? 0 : 120)
-            .attr("class", "electoralVoteText democrat")
+            .attr("class", "electoralVoteText democrat");
 
         electoralVoteChart
             .append("text")
@@ -146,7 +141,6 @@ class ElectoralVoteChart {
             .attr("dx", this.svgWidth)
             .attr("class", "electoralVoteText republican");
 
-        //Display a bar with minimal width in the center of the bar chart to indicate the 50% mark
         electoralVoteChart
             .append("line")
             .attr("x1", this.svgWidth/2)
@@ -155,21 +149,12 @@ class ElectoralVoteChart {
             .attr("y2", 50)
             .style("stroke", "black")
             .style("stroke-width", 2)
-            .attr("class", "middlePoint")
+            .attr("class", "middlePoint");
 
-        //Displays the text mentioning the total number of electoral votes required
-        // to win the elections throughout the country
-        let votesToWin
-        if (electionResult[0].Year == 1960)
-            votesToWin = 269
-        else if(electionResult[0].Year > 1960)
-            votesToWin = 270
-        else
-            votesToWin = 266
 
         electoralVoteChart
             .append("text")
-            .text(`Electoral Vote (${votesToWin} needed to win)`)
+            .text(d => `Electoral Vote (` + Math.abs(d.R_EV_Total - d.D_EV_Total + 1).toString() + `) needed to win)`)
             .attr('y', 45)
             .attr("dx", this.svgWidth/2 - 140)
             .attr("font-size", 16)
